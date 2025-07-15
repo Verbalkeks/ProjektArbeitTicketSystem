@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Nachrichten";
+    var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value; //Hollt sich die ID vom AKtuell eingelogten User
+}
+@model IEnumerable<MsgUser>
+
+
+<div class="text-center">
+    <span class="text-danger">@TempData["NoChat"]</span>
+    <span class="text-danger">@TempData["NotYourChat"]</span>
+</div>
+
+<h1 class="page-title centered-box" style="margin-top: 40px;">Unbeantwortet</h1>
+<hr />
+<a class="btn btn-container" asp-controller="Msg" asp-action="MsgNew">Neue Nachricht Schreiben</a> <!-- Einfacher Button für neue Narichten. Copiert von der Startseite -->
+<div class="centered-box">
+    <div class="stats-text" style="padding: 10px;max-width:350px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word; ">
+
+        @foreach (var Msg in Model) //Erste Foreach Schleife. mit dem If zusammen, trennt es hier die Narichten aus. Nur die nicht beantwortete Narichten kommen hier rein
+        {
+            var lastMsg = Msg.Messages.OrderByDescending(m => m.DateTime).FirstOrDefault(); //Nimmt die Letzte Aktuell Naricht aus dem Verlauf
+            var otherUser = Msg.UserId1 == currentUserId ? Msg.User2?.Fullname : Msg.User1?.Fullname; //Hollt sich denn namen des Chatpartners
+            if (lastMsg.SenderId != currentUserId) //Vergleich für nur Unbeantwortet
+            {
+                <div class="card">
+                    <a asp-action="MsgShow" asp-route-id="@Msg.ChatId" class="stretched-link"></a>
+                    <h2>@otherUser</h2>
+                    @if (lastMsg != null) //Sicherheitscheck sollte aus Gründen die Naricht leer sein
+                    {
+                        <p>@(lastMsg.Text.Length > 100 ? lastMsg.Text.Substring(0, 27) + "..." : lastMsg.Text)</p>
+                        <p>Von : @lastMsg.Sender.Fullname | Am : @lastMsg.DateTime.ToString("g") </p>
+                    }
+                    else
+                    {
+                        <p>Entweder Fehler beim Laden oder keine Nachricht vorhanden!</p>
+                        <p>Sender und Zeitpunkt können daher nicht angezeigt werden!</p>
+                    }
+                </div>
+            }
+        }
+        <p></p>
+        <h3>Beantwortet</h3>
+        @foreach (var Msg in Model) //Zweite Vorschleife. Nur Beantwortete Narichten kommen hier rein
+        {
+            var lastMsg = Msg.Messages.OrderByDescending(m => m.DateTime).FirstOrDefault();
+            var otherUser = Msg.UserId1 == currentUserId ? Msg.User2?.Fullname : Msg.User1?.Fullname;
+            if (lastMsg.SenderId == currentUserId)
+            {
+                <div class="card mb-3">
+                    <a asp-action="MsgShow" asp-route-id="@Msg.ChatId" class="stretched-link"></a>
+                    <h2>@otherUser</h2>
+                    @if (lastMsg != null)
+                    {
+                        <p>@(lastMsg.Text.Length > 100 ? lastMsg.Text.Substring(0, 27) + "..." : lastMsg.Text)</p>
+                        <p>Von : @lastMsg.Sender.Fullname | Am : @lastMsg.DateTime.ToString("g") </p>
+                    }
+                    else
+                    {
+                        <p>Entweder Fehler beim Laden oder keine Nachricht vorhanden!</p>
+                        <p>Sender und Zeitpunkt können daher nicht angezeigt werden!</p>
+                    }
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<script>
+    //Ich lass das mal hier, nochmal ein fetch + Partial View zu erstellen für die Seite währe glaube ich zuviel. Ein HotReaload alle paar Sekunden ist genau so Effektiv. Man sollte im normalfall auch nicht zu lange auf der Seite sein.
+    setInterval(function () { //setInterval setzt eine zeit Fest, ab wann der Code geladen wird, hier alle 100ms
+        location.reload();    // Reload die Aktuelle Seite auf der man sich befindet (HotReload)
+    }, 5000);                  // Zeit für denn Interval
+</script>

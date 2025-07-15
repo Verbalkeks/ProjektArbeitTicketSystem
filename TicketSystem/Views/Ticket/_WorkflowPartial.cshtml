@@ -1,0 +1,24 @@
+﻿@{
+    string[] erledigt = new string[] { "Geöffnet", "Zugeteilt", "Bearbeitet","Abgeschlossen" };
+    string[] offen = new string[] { "Geöffnet", "Wird Zugeteilt","In Bearbeitung", "Abschluss" };
+}
+@model int
+
+
+<div class="card mb-2 stats-text">
+@for (int i = 0; i <= offen.Length - 1; i++)
+{
+    if (i < Model)
+    {
+        <a>● @erledigt[i]   </a>
+    }
+    else if (i == Model ) 
+    {
+        <a>► @offen[i]   </a>
+    }
+    else
+    {
+        <a>◌ @offen[i]   </a>
+    }
+}
+</div>

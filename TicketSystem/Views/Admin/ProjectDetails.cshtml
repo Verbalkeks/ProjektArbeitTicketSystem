@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Projekt Details";
+}
+@model TicketSystem.Models.Project
+    <h1 class="page-title centered-box" style="margin-top:40px">Projekt Details</h1>
+    <hr />
+    <div class="centered-box">
+        <div class="stats-text" style="padding: 10px; width: 100%; max-width: 650px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">
+            <h1>@Model.Title</h1>
+            <p>@Model.Description</p>
+            <p>Gestartet am: @Model.StartDate.ToShortDateString() | Läuft bis vsl.: @Model.EndDate.ToShortDateString()</p>
+            <form asp-action="ProjectEdit" method="get">
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                <button type="submit" class="btn-container">Bearbeiten</button>
+                <a class="btn btn-container click-btn mb-2" asp-controller="Admin" asp-action="ProjectsList">Projektliste</a> @*Hier steht ProjectsList, deckt sich nicht mit dem Namen des Views*@
+                <a asp-controller="Admin" asp-action="AdminStart" class="btn btn-container click-btn mb-2">Startseite</a>
+            </form>
+        </div>
+    </div>
+

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Msgmsg> //Muss oben stehen damit er die Variable richtig auslesen kann scheinbar
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewBag.Title = "Nachrichten";
+    //Variablen für die Ausgabe bestimmer Parameter
+    var current = User?.Identity?.Name;  //Bestimmt den Aktuellen Nutzer. Diehnt für denn Partner
+    var ChatId = Model.FirstOrDefault()?.Chatid; //Bestimmt die Chatid. Wichtig für die Weiterhabe mit dem Submit Button!
+    var chat = Model.FirstOrDefault()?.Chat; //Liest die Modelklasse MsgUsers aus!
+    var partner = chat?.User1.UserName == current ? chat?.User2.Fullname : chat?.User1.Fullname; // Zeigt mithilfe von current und chat denn ChatPartner an!
+}
+
+<h2 class="page-title centered-box" style="margin-top:40px;">Chat mit : @partner</h2>
+<hr />
+<div class="centered-box">
+    <div class="stats-text mb-2"style="padding: 10px; max-width: 850px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">
+        <div class="mt-2" id="chatWindow">
+            @await Html.PartialAsync("_ChatMessagesPartial", Model)
+        </div>
+
+        <form onsubmit="sendMsg(); return false;">
+            <input type="hidden" id="chatId" name="ChatId" value="@ChatId" />
+            <input type="hidden" name="__RequestVerificationToken" value="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
+            <div class="form-group">
+                <textarea id="messageInput" class="form-control" placeholder="Nachricht schreiben..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-container mt-3 mb-3">Senden</button>
+            <a class="btn btn-container mt-2 mb-2" asp-controller="Msg" asp-action="MsgStart">Zurück</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const chatId = document.getElementById("chatId").value; //Bekommt nur die Narichten, die auch zur passenden ChatId gehören
+
+        setInterval(() => { //Set Inerval führt denn Folgenden Code in denn Angegebenen Abständen aus
+            fetch(`/Msg/GetMsgs?chatId=${chatId}`) //Nutzt die GetMsgs Methode mit der ChatId
+                .then(a => a.text()) //Lamba Ausdruck. Nimmt sich denn Text raus.
+                .then(html => {
+                    document.getElementById("chatWindow").innerHTML = html; //Lamba Ausdruck. Es nimmt sich das Element mit der ID chatWindow (oben das div!) und fügt denn Inhalt mithilfe von innerHTML ein.
+                    window.scrollTo(0, document.body.scrollHeight); //Sorgt dafür das er Automatisch nach unten Scrollt
+                });
+        }, 100); //Zeitangabe in ms. 1000ms = 1 Sekunde
+
+        function sendMsg() { //Funktion für sendMsg. Wird beim Drücken vom Button ausgeführt
+            const text = document.getElementById("messageInput").value; //Nimmt sich denn Text aus dem Element mit der ID "messageInput" Raus. AkA Die Textarea oben.
+            const token = document.querySelector("input[name='__RequestVerificationToken']").value; //Hollt sich denn Aktuellen Token zur Validierung mit dem Controller
+
+            fetch("/Msg/SendMsg", { //Nutzt die SendMsg Methode aus dem Controller
+                method: "POST", //Mit der POST Methode ([HttpPost])
+                headers: {
+                    "Content-Type": "application/json", //Damit ASP.Net weiß das es nun einen Body inform von JSON bekommt
+                    "RequestVerificationToken": token //Der Token für die Validierung des ganzen. (Muss bei JavaScript Manuell Mitgeschickt werden)
+                },
+                body: JSON.stringify({ //Die Erstellung des mitgesendeten JSON Datei. Bestehend aus der ChatId und dem Text
+                    chatId: chatId,
+                    text: text
+                })
+            }).then(response => { //Überprüft die Response vom Controller. Wen alles klappt kommt Return OK() wodurch JavaScript sehen kann, das alles klappte im Controller.
+                if (response.ok) {
+                    document.getElementById("messageInput").value = "";
+                } else {
+                    alert("Fehler beim Senden der Nachricht.");
+                }
+            });
+        }
+    </script>
+}

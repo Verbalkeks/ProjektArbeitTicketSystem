@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Ticket Anlegen";
+    var dependencies = ViewBag.TicketDependencies as List<SelectListItem>;
+}
+@model CreateTicketViewModel
+
+<h1 class="page-title centered-box">Ticket Anlegen</h1>
+<hr />
+@*class="row text-black" Das hat keinen Unterschied gezeigt, ich lass es erstmal auskommentiert*@
+<div class="centered-box" style="max-width: 450px">
+    <form asp-action="CreateTicket">
+        <div class="stats-text" style="padding: 14px;">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" style="width: 450px">
+                <label asp-for="Title" class="control-label">Titel</label>
+                <input asp-for="Title" class="form-control" placeholder="Bitte Titel eingeben"></input>
+                <span asp-validation-for="Title"class="bg-transparent" style="border-color:black"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Beschreibung</label>
+                <textarea asp-for="Description" class="form-control" rows="5" placeholder="Bitte Beschreibung eingeben"></textarea>
+                <span asp-validation-for="Description"class="bg-transparent" style="border-color:black"></span>
+            </div>
+            <input type="hidden" asp-for="AssignedProjectId" />
+            <div class="form-group">
+                <label asp-for="AssignedUserId" class="control-label">Bearbeiter Auswählen</label>
+                <select asp-for="AssignedUserId" class="form-control" asp-items="ViewBag.AssignedUserId">
+                    <option value="">--Optional--</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Abhängigkeiten Auswählen</label>
+                @foreach (var item in ViewBag.TicketDependencies)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               name="TicketDependencies"
+                               value="@item.Value"
+                               @(item.Selected ? "checked" : "") />
+                        <label class="form-check-label">@item.Text</label>
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Anlegen" class="btn btn-container" />
+            </div>
+            <div class="mb-2">
+                <a class="btn btn-container" asp-action="TicketStart">Ticketliste</a>
+                <a class="btn btn-container" asp-controller="Home" asp-action="Index">Startseite</a>
+            </div>
+        </div>
+    </form>
+</div>

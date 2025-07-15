@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TicketSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TicketSystem.styles.css" asp-append-version="true" />
+    <link href="/css/Styles.css" rel="stylesheet" /> @*Einen link erstellt zum css Style.css unter wwwroot*@
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm mb-3" style="background: radial-gradient(circle,  palevioletred 40%, purple 100%);">
+            @*hier bg-white im original*@
+            <div class="container-fluid" style="background: radial-gradient(circle,  palevioletred 40%, purple 100%);">
+                @*Eigenen Farbverlauf, flüssiger Übergang zur Startseite*@
+                <p class="stats-text-logo" style="margin-right: 5px;">Aetherbound GmbH</p><a class="navbar-brand" style="color: black;" asp-area="" asp-controller="Home" asp-action="Index">Ticket System</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Start</a>
+                        </li>
+                        @if (User.IsInRole("Admin")) //Checkt ob der Nutzer Admin ist! Wenn ja werden die richtigen Buttons angezeigt
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Ticket" asp-action="TicketStart">Tickets</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="ProjectsList">Projekte</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminUserList">Nutzer</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Msg" asp-action="MsgStart">Nachrichten</a>
+                            </li>
+                        }
+                        else if (User.IsInRole("Developer")) //Sonst checkt er nach Dev
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Ticket" asp-action="TicketStart">Tickets</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Msg" asp-action="MsgStart">Nachrichten</a>
+                            </li>
+                        }
+                        else if (User.IsInRole("User")) //Und zuletzt nach User. Nur eins davon wird am ende immer zugreifen!
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Ticket" asp-action="TicketStart">Tickets</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Msg" asp-action="MsgStart">Nachrichten</a>
+                            </li>
+                        }
+                    </ul>
+                    <div class="nav-item">
+                        @if (User?.Identity?.IsAuthenticated ?? false)
+                        {
+                            <span>Hallo @User.Identity.Name</span>
+                            <a asp-controller="Account" asp-action="Logout"
+                               class="btn btn-sm btn-outline-dark ms-3">Logout</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login"
+                               asp-route-returnurl="@ViewContext.HttpContext.Request.Path"
+                               class="btn btn-sm btn-outline-dark">Login</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <footer class="footer text-muted" style=" background: radial-gradient(circle,  palevioletred 40%, purple 100%);">
+        <div class="container" style="color: black;">
+            <span>&copy; 2025 - Aetherbound GmbH</span>
+            @*<a asp-area="" class="btn-footer" asp-controller="Home" asp-action="Privacy">Privacy</a>*@
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/script.js"></script> @*Das Script was für die Klickgeräusche zuständig ist*@
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const clickSound = document.getElementById("clickSound");
+
+            const delayedLinks = document.querySelectorAll("a[data-delay='true']");
+            delayedLinks.forEach(link => {
+                link.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    if (clickSound) {
+                        clickSound.currentTime = 0;
+                        clickSound.play();
+                    }
+
+                    const url = this.href;
+                    setTimeout(() => {
+                        window.location.href = url;
+                    }, 300);
+                });
+            });
+        });
+    </script>
+</body>
+</html >

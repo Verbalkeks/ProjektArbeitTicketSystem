@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Admin Startseite";
+}
+@model StatisticViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin-Bereich</title>
+    <link href="/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/Styles.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="centered-box">
+        <p class="stats-text">
+            Hallo Admin!<br>Willkommen im Admin-Bereich, hier können Sie den Status diverser Projekte und Tickets begutachten.
+            <br>Bitte nutzen Sie die Weiterleitung in der Kopfzeile, um auf die entsprechenden Seiten zu gelangen!
+        </p>
+    </div>
+    <h1 class="page-title centered-box" style="margin-top: 40px;">Statistiken</h1>
+    <hr />
+    <div class="stats-wrapper">
+        <div class="stat-column">
+            <h3>Tickets</h3>
+            <a>● Gesamt:      @Model.TicketTotal</a>
+            <a>● Offen:       @Model.TicketOpen</a>
+            <a>● Geschlossen: @Model.TicketClose</a>
+        </div>
+        <div class="stat-column">
+            <h3>Projekte</h3>
+            <a>● Gesamt:      @Model.ProjectTotal</a>
+            <a>● Offen:       @Model.ProjectOpen</a>
+            <a>● Geschlossen: @Model.ProjectClose</a>
+        </div>
+        <div class="stat-column">
+            <h3>Benutzer</h3>
+            <a>● Admin:      @Model.Admin</a>
+            <a>● Developer:  @Model.Dev</a>
+            <a>● Support:    @Model.Sup</a>
+        </div>
+    </div>
+    <hr />
+    @*<div class="btn-wrapper">
+        <a class="btn btn-container" asp-controller="Ticket" asp-action="TicketStart">Ticketbereich</a>
+    </div>*@
+</body>
+</html>

@@ -1,0 +1,9 @@
+﻿@model IEnumerable<TicketSystem.Models.Msgmsg>
+
+@foreach (var msg in Model)
+{
+    <div class="card mb-2 p-2">
+        <strong>@msg.Sender?.Fullname :</strong> @msg.Text <br />
+        <small>@msg.DateTime.ToString("g")</small>
+    </div>
+}

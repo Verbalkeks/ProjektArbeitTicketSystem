@@ -1,0 +1,162 @@
+﻿body 
+{
+    font-size: 1.1em;
+    color: black;
+    text-align: left;
+    background: radial-gradient(circle, lightyellow 70%, lightgoldenrodyellow 80%, lightpink 85%, rebeccapurple 100% )
+}
+
+.stats-wrapper
+{
+    display: flex; /*Aktiviert Flexbox Layout*/
+    justify-content: center; /*Zentriert die Spalten horizontal*/
+    gap: 40px;
+    margin-top: 30px; /*Abstand zur Überschrift*/
+    margin-bottom: 30px;
+}
+
+.stat-column 
+{
+    display: flex;
+    flex-direction: column;
+    /*align-items: stretch;*/ /*Speziell hierfür für die linksbündigkeit*/
+    background: linear-gradient(to top, purple 0%, palevioletred 3%, lightpink 6%, palevioletred 96%, purple 100%);
+    padding: 15px; /*Für leeren Raum*/
+    border-radius: 8px; /*Für die abgerundeten Ecken*/
+}
+
+.stat-column h3
+{
+    margin-bottom: 10px;
+    border-bottom: 1px solid black;  /*Unterstrich zur Abgrenzung*/ 
+}
+
+.stat-item
+{
+    margin: 5px;
+    padding: 8px;
+    font-size: 1.3em;
+}
+.btn-wrapper
+{
+    margin-bottom: 80px;
+}
+
+.btn-container {
+    padding: 10px;
+    display: flex;
+    margin-top: 15px;
+    border-radius: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    color: white; /*Hier muss extra color white angegeben werden weil die Schrift sonst nicht weiß dargestellt wird*/
+    background-color: rebeccapurple;
+    text-align: center;
+    border: none;
+}
+.btn-container:active
+{
+    font-size: 15px;
+}
+.btn-container-left {
+    padding: 9px;
+    display: flex;
+    margin-top: 30px;
+    border-radius: 8px;
+    margin-right: auto;
+    width: fit-content;
+    color: white;
+    background-color: rebeccapurple;
+    text-align: center;
+    border: none;
+}
+.btn-footer 
+{
+    display: inline-block; /*Hier block statt flex weil block genauso hoch und breit ist wie der Inhalt*/
+    padding: 3px;
+    color: white;
+    background-color: rebeccapurple;
+    border-radius: 8px;
+    line-height: normal;
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) /*z.B. für Tablets*/
+{
+    .stats-wrapper 
+    {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+}
+.centered-box
+{
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+.max-center-box-wrapper
+{
+    display: flex;
+    align-items: center; /* Vertikale Zentrierung */
+    justify-content: center; 
+    height: 100vh; /* Beispiel: gesamte Bildschirmhöhe */
+}
+.max-center-box 
+{
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: max-content;
+}
+.center-left {
+    display: flex;
+    margin-left: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: max-content;
+}
+.page-title /*Für Überschriften*/ 
+{
+    margin-bottom: 40px;
+    padding: 8px;
+    border-radius: 8px;
+    /*    background-color: pink*/
+    background: linear-gradient(to top, purple 0%, palevioletred 5%, lightpink 10%, palevioletred 90%, purple 95%, purple 100%);
+}
+.stats-text  /*Für jeglichen allgemeinen Text*/
+{ 
+    display: inline-block;
+    margin-top: 10px;
+    border-radius: 8px;
+    background: linear-gradient(to top, purple 0%, palevioletred 3%, lightpink 6%, palevioletred 96%, purple 100%);
+    padding: 5px;
+}
+.stats-text-logo /*Speziell für die Firma im header*/
+{
+    color: white;
+    display: inline-block;
+    margin-top: 5px;
+    border-radius: 3px;
+    background-color: black;
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.stats-text-center
+{
+    text-align: center;
+}
+.stats-detail-desc {
+    flex: 1 1 auto; /*Kurzschreibweise für Flexboxlayouts: grow, shrink, auto*/
+    border-bottom: 1px solid black;
+    padding: 5px;
+    overflow-wrap: break-word;
+}

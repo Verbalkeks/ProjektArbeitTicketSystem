@@ -1,0 +1,23 @@
+﻿@model Project
+@{
+    ViewBag.Title = "Projekt Wählen";
+}
+
+<h1 class="page-title centered-box" style="margin-top: 40px;">Wählen Sie zuerst das Projekt</h1>
+<hr />
+<div class="centered-box">
+    <div class="stats-text"style="padding: 10px;">
+        <form asp-action="SelectProject">
+            <div class="form-group">
+                <label asp-for="Id" class="control-label mb-1">Projekt Auswählen</label>
+                <select asp-for="Id" class="form-control" asp-items="ViewBag.Projects">
+                    <option value="">--Bitte wählen--</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Auswahl Speichern" class="btn btn-container" />
+                <button type="button" onclick="history.back()" class="btn btn-container click-btn mb-1" style="margin-top: 8px">Zurück</button>
+            </div>
+        </form>
+    </div>
+</div>

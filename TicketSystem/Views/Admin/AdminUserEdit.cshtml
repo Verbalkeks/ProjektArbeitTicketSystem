@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Nutzer Bearbeiten";
+}
+@model AdminEditUserViewModel
+
+    <h1 class="page-title centered-box" style="margin-top: 40px;">Nutzer Bearbeiten</h1>
+    <div class="centered-box">
+        <div class="stats-text"  style="max-width: 850px;">
+            <form asp-controller="Admin" asp-action="AdminUserEdit" method="post">
+                <input type="hidden" asp-for="Id" />
+                <h4 class="mt-2">Nutzerdaten für @Model.Fullname ändern</h4>
+                <div class="mb-3">
+                    <label asp-for="Firstname">Vorname</label>
+                    <input asp-for="Firstname" class="form-control" />
+                    <span asp-validation-for="Firstname" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Lastname">Nachname</label>
+                    <input asp-for="Lastname" class="form-control" />
+                    <span asp-validation-for="Lastname" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Username">Nutzername</label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Email">E-Mail-Adresse</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Phone">Telefonnummer</label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+
+                <hr />
+
+                <h4>Rollen für @Model.Fullname ändern</h4>
+                @for (int i = 0; i < Model.Roles.Count; i++) //iteriert über alle Rollen um für alle eine checkbox zu erstellen
+                {
+                    <div class="mb-3">
+                        <input type="checkbox" asp-for="Roles[i].IsSelected" />
+                        <label>@(Model.Roles[i].RoleName == "User" ? "Support" : Model.Roles[i].RoleName)</label>
+                        <input type="hidden" asp-for="Roles[i].RoleName" />
+                    </div>
+                }
+                <span asp-validation-for="Roles" class="text-danger"></span>
+
+                <hr />
+
+                <h4>Passwort für @Model.Fullname ändern</h4>
+                <div class="mb-3">
+                    <label asp-for="NewPassword">Neues Passwort</label>
+                    <input asp-for="NewPassword" type="password" class="form-control" />
+                    <span asp-validation-for="NewPassword" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ConfirmPassword">Neues Passwort bestätigen</label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                <button type="submit" class="btn btn-container click-btn">Speichern</button>
+                <a asp-controller="Admin" asp-action="AdminUserList" class="btn btn-container click-btn">Nutzerliste</a>
+                <a asp-controller="Admin" asp-action="AdminStart" class="btn btn-container click-btn mb-2">Startseite</a>
+            </form>
+        </div>
+    </div>

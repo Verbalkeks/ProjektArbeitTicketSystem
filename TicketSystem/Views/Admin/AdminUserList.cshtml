@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "Admin Nutzerliste";
+    var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+}
+@model List<AdminUserListViewModel>
+
+
+<h1 class="page-title centered-box" style="margin-top: 40px">Benutzer</h1>
+<div class="text-center">
+    <span class="text-danger">@TempData["UserNotFound"]</span>
+    <span class="text-danger">@TempData["NotAuthorized"]</span>
+    <span class="text-danger">@TempData["NoRolesFound"]</span>
+    <span class="text-success">@TempData["EditSuccess"]</span>
+    <span class="text-success">@TempData["UserCreated"]</span>
+</div>
+<div>
+        @for(int i = 0; i < ViewBag.Roles.Count; i++) //ViewBag.Roles enthält alle Rollen, die existieren (aus roleManager  gezogen)
+        {
+            <div class="stats-text" style="display: grid; grid-template-columns: repeat(6,1fr); gap: 8px; align-items: center; flex-wrap: wrap;">
+                <h3>@(ViewBag.Roles[i] == "SuperAdmin" ? "Super Admin" : ViewBag.Roles[i] == "User" ? "Support" : ViewBag.Roles[i])</h3> @*gibt den Rollennamen aus, ersetzt dabei aber "User" durch "Support"*@
+            </div>
+            <div>
+                @*Auflistung der Kategorien*@
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                        <h5>Name</h5>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                        <h5>Nutzername</h5>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                        <h5>E-Mail-Adresse</h5>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                        <h5>Telefonnummer</h5>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                        <h5>Rolle/n</h5>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                        <h5>Aktion</h5>
+                    </div>
+                </div>
+                @if (Model.FirstOrDefault(u => u.Roles.Contains(ViewBag.Roles[i])) != null)
+                {
+                    <hr>
+                }
+            </div>
+   
+        @for (int j = 0; j < Model.Count(); j++) //enthält Liste mit allen Usern und Daten des Viewmodels
+        {
+            if (Model[j].Roles.Contains(ViewBag.Roles[i])) //User wird unter jeder Rolle aufgelistet, der er zugehört (also mehrmals bei mehreren Rollen)
+            {
+                <div>
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-2" style="min-width: 130px;">
+                            @Model[j].Name
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-2" style="min-width: 130px;">
+                            @Model[j].Nutzername
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-2" style="min-width: 200px;">
+                            @Model[j].Email
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-2" style="min-width: 150px;">
+                            @Model[j].Telefonnummer
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-2" style="min-width: 150px;">
+                            @for (int k = 0; k < Model[j].Roles.Count; k++)
+                            {
+                                if (k != 0)
+                                {
+                                    @:,
+                                }
+                                @(Model[j].Roles[k] == "SuperAdmin" ? "Super Admin" : Model[j].Roles[k] == "User" ? "Support" : Model[j].Roles[k]);
+                            }
+                        </div>
+                        @if (User.IsInRole("SuperAdmin") || !Model[j].Roles.Contains("SuperAdmin")
+                          && !Model[j].Roles.Contains("Admin") || User.IsInRole("Admin") && userId == Model[j].ID)
+                        {
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-2" style="min-width: 100px;">
+                                <a asp-controller="Admin" asp-action="AdminUserEdit" asp-route-userId="@Model[j].ID" class="btn btn-container mb-1" style="margin:0">Bearbeiten</a>
+                            </div>
+                        }
+                    </div>
+                    @if (Model[j] != Model.Last(u => u.Roles.Contains(ViewBag.Roles[i])))
+                    {
+                        <hr>
+                    }
+                </div>
+            }
+        }
+    }
+    </div>
+    <a asp-controller="Admin" asp-action="AdminUserCreate" class="btn btn-container mt-2">Neuer Nutzer</a>
+    <a asp-controller="Admin" asp-action="AdminStart" class="btn btn-container mt-2">Startseite</a>

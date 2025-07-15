@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Neuer Chat";
+}
+@model IEnumerable<AppUser>
+
+<h2 class="page-title centered-box" style="margin-top:40px;">Neuer Chat</h2>
+<hr />
+<div class="centered-box">
+    <div class="stats-text" style="padding: 10px;width: fit-content; max-width: 450px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">
+        <form asp-action="MsgNew" method="post">
+            <div class="form-group">
+                <label class="mb-2" for="userId2">Empfänger auswählen:</label>
+                <select id="userId2" name="userId2" class="form-control" required>
+                    <option disabled selected value="">-- Bitte auswählen --</option>
+                    @foreach (var user in Model)
+                    {
+                        <option value="@user.Id">@user.Fullname</option>
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-container mb-2 mt-3">Chat erstellen</button>
+            <button type="button" onclick="history.back()" class="btn btn-container click-btn mb-2" style="margin-top: 8px">Zurück</button>
+
+        </form>
+    </div>
+</div>

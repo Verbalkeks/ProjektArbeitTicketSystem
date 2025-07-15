@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Ticket Bearbeiten";
+}
+@model EditTicketViewModel
+    <h1 class="page-title centered-box" style="margin-top: 40px">Ticket Bearbeiten</h1>
+    <div class="centered-box">
+        <div class="stats-text" style="width:450px; padding:10px">
+            <form asp-action="EditTicket">
+                <div asp-validation-summary="ModelOnly"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="mt-2">
+                    <label asp-for="Description" class="control-label">Beschreibung</label>
+                    <textarea asp-for="Description" class="form-control" rows="5" cols="25" placeholder="@Model.Description"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div>
+                    <label asp-for="AssignedUserId" class="control-label">Bearbeiter Auswählen</label>
+                    <select asp-for="AssignedUserId" class="form-control" asp-items="ViewBag.AssignedUserId">
+                        <option value="@Model.AssignedUserId"></option>
+                    </select>
+                </div>
+                <div>
+                    @if (Model.Blockings!.Count != 0)
+                    {
+                        @:<div class="h5">Ticket wird geblockt durch:</div>
+                        <ul>
+                            @foreach (var item in Model.Blockings)
+                            {
+                                @:<li>@item.Title</li>
+                            }
+                        </ul>
+                    }
+                </div>
+                @if (Model.Blockings.Count == 0)
+                {
+                    <div>
+                        <input type="checkbox"
+                               name="Standing"
+                               value="geschlossen"
+                               class="form-check-input"
+                               id="closeTicketCheckbox" />
+                        <label class="form-check-label" for="closeTicketCheckbox">Ticket schließen?</label>
+                    </div>
+                }
+                <div class="mb-2 mt-2">
+                    <input type="submit" value="Speichern" class="btn btn-container btn-success" />
+                </div>
+            </form>
+            <div>
+                <a asp-controller="Ticket" asp-action="TicketStart" class="btn btn-container">Ticketliste</a>
+                <a asp-controller="Ticket" asp-action="DetailsTicket" asp-route-id="@Model.Id" class="btn btn-container mb-2">Detailübersicht</a>
+            </div>
+        </div>
+    </div>

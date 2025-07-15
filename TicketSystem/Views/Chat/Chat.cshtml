@@ -1,0 +1,48 @@
+﻿@{
+	ViewBag.Title = "Chat";
+}
+@Html.AntiForgeryToken()
+@model List<TicketSystem.Models.ChatMessage>
+
+<input type="text" id="messageInput" />
+<button type="button" onclick="sendMsg()">Senden</button>
+<div id="chatWindow">
+	@await Html.PartialAsync("_MsgPartial", Model)
+</div>
+
+@section Scripts {
+	<script>
+
+		setInterval(function()
+		{fetch("/Chat/GetMsg")
+		.then(a => a.text())
+		.then(html => 
+			{document.getElementById("chatWindow").
+			innerHTML = html;
+			});
+		},3000);
+
+		function sendMsg()
+		{
+			const msg = document
+			.getElementById("messageInput")
+			.value;
+			const token = document
+			.querySelector("input[name='__RequestVerificationToken']")
+			.value;
+			fetch("/Chat/SendMsg",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type":"application/json","RequestVerificationToken":token
+				},
+				body: JSON.stringify({text:msg})
+			})
+			.then(() =>
+			{
+				document
+				.getElementById("messageInput").value = "";
+			});
+		}
+	</script>
+}

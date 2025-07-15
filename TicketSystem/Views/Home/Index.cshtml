@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Startseite";
+}
+@model StatisticViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Startseite</title>
+    <link href="/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/Styles.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="centered-box">
+        <p class="stats-text">
+            Willkommen auf der Startseite des Ticketsystems der Aetherbound GmbH, hier finden Sie unser Ticketsystem zum
+            Erstellen von Bug Reports.<br> Wenn Sie ein neues Ticket erstellen wollen, denken Sie bitte daran, dass Sie sich vorher anmelden
+            müssen.<br>Bitte nutzen Sie die Weiterleitung in der Kopfzeile, um auf die entsprechenden Seiten zu gelangen!
+        </p>
+    </div>
+    <h1 class="page-title centered-box" style="margin-top: 40px;">Statistiken</h1>
+    <hr />
+    <div class="stats-wrapper">
+        <div class="stat-column">
+            <h3>Tickets</h3>
+            <div class="stat-item">● Gesamt: @Model.TicketTotal</div>
+            <div class="stat-item">● Offen: @Model.TicketOpen</div>
+            <div class="stat-item">● Geschlossen: @Model.TicketClose</div>
+        </div>
+        <div class="stat-column">
+            <h3>Projekte</h3>
+            <div class="stat-item">● Gesamt: @Model.ProjectTotal</div>
+            <div class="stat-item">● Offen: @Model.ProjectOpen</div>
+            <div class="stat-item">● Geschlossen: @Model.ProjectClose</div>
+        </div>
+        <div class="stat-column">
+            <h3>Benutzer</h3>
+            <div class="stat-item">● Admin: @Model.Admin</div>
+            <div class="stat-item">● Developer: @Model.Dev</div>
+            <div class="stat-item">● Support: @Model.Sup</div>
+        </div>
+    </div>
+    <hr />
+    <div class="btn-wrapper">
+        <a data-delay="true" class="btn btn-container click-btn" asp-controller="Ticket" asp-action="TicketStart">Ticketbereich</a>
+        <audio id="clickSound" src="/sounds/click.mp3" preload="auto"></audio>
+    </div>
+</body>
+</html>

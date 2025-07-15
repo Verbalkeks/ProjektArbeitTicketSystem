@@ -1,0 +1,30 @@
+﻿@model IEnumerable<TicketAssignHistory>
+@{
+    ViewBag.Title = "Ticket Verlauf";
+}
+
+<h1 class="page-title centered-box" style="margin-top: 40px;">Zuweisungsverlauf von @ViewData["TicketName"]</h1>
+<div class="centered-box">
+    <div class="stats-text" style="width: 100%; max-width: 450px;word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Zugewiesen am</th>
+                    <th>Zugewiesen von</th>
+                    <th>Zugewiesen an</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var entry in Model)
+                {
+                    @:<tr>
+                        @:<td>@entry.AssignedAt</td>
+                        @:<td>@entry.AssignedBy.Fullname</td>
+                        @:<td>@entry.AssignedTo.Fullname</td>
+                    @:</tr>
+                }
+            </tbody>
+        </table>
+        <button type="button" onclick="history.back()" class="btn btn-container click-btn mb-2" style="margin-top: 8px">Zurück</button>
+    </div>
+</div>

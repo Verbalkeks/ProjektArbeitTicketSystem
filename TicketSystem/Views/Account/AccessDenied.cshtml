@@ -1,0 +1,9 @@
+﻿@{
+    ViewBag.Title = "Zugriff Verweigert";
+}
+@model string
+
+    <h1 class="text-danger">Zugriff verweigert</h1>
+    <span class="text-danger text-center">@TempData["NoLogin"]</span>
+    <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model" class="btn btn-outline-dark">Login</a>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark">Startseite</a>

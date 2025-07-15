@@ -1,0 +1,84 @@
+﻿@model TicketStartViewModel
+@{
+    ViewBag.Title = "Tickets";
+    var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+}
+
+<h1 class="page-title centered-box" style="margin-top: 40px;">Ticket Liste</h1>
+<hr />
+
+<div class="text-center">
+    <span class="text-danger">@TempData["TicketNotSaved"]</span>
+    <span class="text-danger">@TempData["TicketNull"]</span>
+    <span class="text-danger">@TempData["TicketNotFound"]</span>
+    <span class="text-danger">@TempData["FileNameNotFound"]</span>
+    <span class="text-danger">@TempData["CommentNotFound"]</span>
+    <span class="text-danger">@TempData["FileNotFound"]</span>
+</div>
+<div class="centered-box">
+    <div class="stats-text" style="padding: 10px;width:900px;max-width:850px; word-wrap:break-word;overflow-wrap:break-word;word-break:break-word;">
+        <div class="centered-box">
+            <div>
+                <form asp-action="TicketStart">
+                    <div>
+                        <div class="d-flex gap-2">
+                            <span>
+                                <label asp-for="Filter.ProjectId" class="control-label" style="font-weight: bold">Projekt</label>
+                                <select name="ProjectId" asp-for="Filter.ProjectId" class="form-control" style="max-width: 140px" asp-items="ViewBag.Projects" onchange="this.form.submit()">
+                                    <option value="">--Filter wählen--</option>
+                                </select>
+                            </span>
+                            <span>
+                                <label asp-for="Filter.CreatorId" class="control-label" style="font-weight: bold">Ersteller</label>
+                                <select name="CreatorId" asp-for="Filter.CreatorId" class="form-control" asp-items="ViewBag.Users" onchange="this.form.submit()">
+                                    <option value="">--Filter wählen--</option>
+                                </select>
+                            </span>
+                            <span>
+                                <label asp-for="Filter.AssignedUserId" class="control-label" style="font-weight: bold">Zugewiesener</label>
+                                <select name="AssignedUserId" asp-for="Filter.AssignedUserId" class="form-control" asp-items="ViewBag.Users" onchange="this.form.submit()">
+                                    <option value="">--Filter wählen--</option>
+                                </select>
+                            </span>
+                            <span>
+                                <label asp-for="Filter.Standing" class="control-label" style="font-weight: bold">Status</label>
+                                <select name="Standing" asp-for="Filter.Standing" class="form-control" asp-items="ViewBag.Standings" onchange="this.form.submit()">
+                                    <option value="">--Filter wählen--</option>
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <a asp-action="SelectProject" data-delay="true" class="btn btn-container">Neues Ticket erstellen</a>
+            <a asp-controller="Home" asp-action="Index" data-delay="true" class="btn btn-container mb-2">Zurück zum Start</a>
+            <audio id="clickSound" src="/sounds/click.mp3" preload="auto"></audio>
+
+        </div>
+
+        @foreach (var ticket in Model.TicketList)
+        {
+            if (ticket.AssignedProjectId == null)
+            {
+                break;
+            }
+            <div class="mb-2 border-bottom" style="display: flex">
+                <span>
+                    #@ticket.Id [@ticket.Standing.ToString()] <strong>@ticket.Title</strong> (@ticket.AssignedProject.Title) -
+                </span>
+                <span class="mb-3" style="margin-left: auto;">
+                    @if ((User.IsInRole("Admin") ||@*User == Admin*@
+                    userId == (ticket.CreatorId.ToString()) || @*User == Ersteller*@
+                    userId == (ticket.AssignedUserId?.ToString())) &&@*User == Bearbeiter*@
+                    ticket.ReturnStanding() != 4) @*Ticket nicht geschlossen*@
+                    {
+                        <a asp-action="EditTicket" asp-route-id="@ticket.Id" class="btn btn-container" style="display: inline-flex;">Bearbeiten</a>
+                    }
+                    <a asp-action="DetailsTicket" asp-route-id="@ticket.Id" class="btn btn-container" style="display: inline-flex;">Details</a>
+                </span>
+            </div>
+        }
+    </div>
+</div>

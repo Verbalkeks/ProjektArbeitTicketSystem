@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Nutzer Anlegen";
+}
+@model AdminCreateUserViewModel
+
+<h4 class="page-title centered-box" style="margin-top: 40px;">Neuen Nutzer anlegen</h4>
+<span class="text-danger">@TempData["WHAT?!"]</span>
+<div class="centered-box">
+    <form asp-controller="Admin" asp-action="AdminUserCreate" method="post">
+        <div class="stats-text" style="padding:10px;width: 450px">
+            <div class="mb-3 mt-2">
+                <label asp-for="Username">Nutzername</label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Firstname">Vorname</label>
+                <input asp-for="Firstname" class="form-control" />
+                <span asp-validation-for="Firstname" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Lastname">Nachname</label>
+                <input asp-for="Lastname" class="form-control" />
+                <span asp-validation-for="Lastname" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email">E-Mail-Adresse</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Phone">Telefonnummer</label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+
+            <hr />
+
+            @for (int i = 0; i < Model.Roles.Count; i++) //iteriert über die im Model mitgegebenen Rollen
+            {
+                <div class="mb-3">
+                    <input type="checkbox" asp-for="Roles[i].IsSelected" />
+                    <label>@(Model.Roles[i].RoleName == "User" ? "Support" : Model.Roles[i].RoleName)</label> @*Name der Rolle "User" wird durch "Support" ersetzt*@
+                    <input type="hidden" asp-for="Roles[i].RoleName" />
+                </div>
+            }
+            <span asp-validation-for="Roles" class="text-danger"></span>
+
+            <hr />
+
+            <div class="mb-3">
+                <label asp-for="Password">Passwort</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ConfirmPassword">Passwort bestätigen</label>
+                <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+            <button type="submit" class="btn btn-container mt-2">Anlegen</button>
+            <a asp-controller="Admin" asp-action="AdminUserList" class="btn btn-container mt-2">Nutzerliste</a>
+            <a asp-controller="Admin" asp-action="AdminStart" class="btn btn-container mt-2 mb-2">Startseite</a>
+        </div>
+    </form>
+</div>

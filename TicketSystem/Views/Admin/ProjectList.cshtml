@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Projekt Liste";
+}
+@model IEnumerable<Project>
+
+
+<span class="text-danger">@TempData["ProjectNotFound"]</span>
+<h1 class="page-title centered-box" style="margin-top: 40px;">Projekt Liste</h1>
+<hr />
+<div class="centered-box">
+    <div class="stats-text mt-2"style="padding: 10px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">
+    @foreach (var project in Model)
+    {
+        @if (project.Closed == false)
+        {
+            <div class="card bg-transparent">
+                <a asp-action="ProjectDetails" asp-route-id="@project.Id" class="stretched-link click-btn"></a>
+                <h2>@project.Title</h2>
+                <p>@(project.Description?.Length > 100 ? project.Description.Substring(0, 97) + "..." : project.Description)</p>
+                <p>Anfangsdatum: @project.StartDate.ToShortDateString() | Vsl. Enddatum: @project.EndDate.ToShortDateString()</p>
+            </div>
+        }
+        else
+        {
+            <div class="card bg-transparent">
+                <a asp-action="ProjectDetails" asp-route-id="@project.Id" class="stretched-link click-btn"></a>
+                <h2>@project.Title</h2>
+                <p>@(project.Description?.Length > 100 ? project.Description.Substring(0, 97) + "..." : project.Description)</p>
+                <p>Projekt bereits geschlossen! | Schließungsdatum: @(project.ClosedAt?.ToShortDateString() ?? "Fehler!")</p>
+            </div>
+        }
+    }
+<a class="btn btn-container click-btn mb-2" asp-controller="Admin" asp-action="ProjectCreate">Neues Projekt</a>
+<a asp-controller="Admin" asp-action="AdminStart" class="btn btn-container click-btn mb-2">Startseite</a>
+</div>
+</div>
