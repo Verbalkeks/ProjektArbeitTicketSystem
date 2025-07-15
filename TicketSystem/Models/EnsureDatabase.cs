@@ -11,7 +11,7 @@ namespace TicketSystem.Models
         private const string devRole = "Developer";
         private const string userRole = "User";
 
-        private const string superAdminName = "ToSe";
+        private const string superAdminName = "SuperAdmin";
         private const string adminName = "Admin";
 
         private const string superAdminPW = "SuperSecret123$";
@@ -71,8 +71,8 @@ namespace TicketSystem.Models
             {
                 superAdmin = new AppUser()
                 {
-                    Firstname = "Tom",
-                    Lastname = "Selig",
+                    Firstname = "Super",
+                    Lastname = "Admin",
                     UserName = superAdminName
                 };
                 await userManager.CreateAsync(superAdmin, superAdminPW);
@@ -104,44 +104,18 @@ namespace TicketSystem.Models
                 await userManager.CreateAsync(bjoern, PW);
                 await userManager.AddToRoleAsync(bjoern, devRole);
             }
-
-            AppUser? corin = await userManager.FindByNameAsync("CoPr");
-            if (corin == null)
+            
+            AppUser? normalUser = await userManager.FindByNameAsync("BrTe");
+            if (normalUser == null)
             {
-                corin = new AppUser()
+                normalUser = new AppUser()
                 {
-                    Firstname = "Corin",
-                    Lastname = "Prescher",
-                    UserName = "CoPr"
+                    Firstname = "Brigitte",
+                    Lastname = "Tester",
+                    UserName = "BrTe"
                 };
-                await userManager.CreateAsync(corin, PW);
-                await userManager.AddToRoleAsync(corin, devRole);
-            }
-
-            AppUser? nico = await userManager.FindByNameAsync("NiHe");
-            if (nico == null)
-            {
-                nico = new AppUser()
-                {
-                    Firstname = "Nico",
-                    Lastname = "Heße",
-                    UserName = "NiHe"
-                };
-                await userManager.CreateAsync(nico, PW);
-                await userManager.AddToRoleAsync(nico, devRole);
-            }
-
-            AppUser? chris = await userManager.FindByNameAsync("ChDo");
-            if (chris == null)
-            {
-                chris = new AppUser()
-                {
-                    Firstname = "Chris",
-                    Lastname = "Domberg",
-                    UserName = "ChDo"
-                };
-                await userManager.CreateAsync(chris, PW);
-                await userManager.AddToRoleAsync(chris, userRole);
+                await userManager.CreateAsync(normalUser, PW);
+                await userManager.AddToRoleAsync(normalUser, userRole);
             }
             await app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>().SaveChangesAsync();
         }
@@ -160,7 +134,7 @@ namespace TicketSystem.Models
                     new Project()
                     {
                         Title = "Lunaria",
-                        Description = "Ein 2D Sandbox Game indem der Spieler die Möglichkeit besitzt seine eigene kleine Mondbasis zu erbauen, Nicht-Spieler Characktere dort einziehen zu lassen, Viele verschiedene Bosse mit einer Großen Menge an Waffen bekämpfen und die Geheimnisse des Mondes zu erforschen",
+                        Description = "Ein 2D Sandbox Game indem der Spieler die Möglichkeit besitzt seine eigene kleine Mondbasis zu erbauen, Nicht-Spieler Charaktere dort einziehen zu lassen, Viele verschiedene Bosse mit einer Großen Menge an Waffen bekämpfen und die Geheimnisse des Mondes zu erforschen",
                         StartDate = DateTime.Today,
                         EndDate = new DateTime(2030, 1, 1)
                     },
